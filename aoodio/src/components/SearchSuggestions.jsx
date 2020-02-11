@@ -20,7 +20,8 @@ export default function SearchSuggestions(props) {
     "Shakira",
     "Jennifer Lopez",
     "21 Pilots",
-    "Clean Bandit"
+    "Clean Bandit",
+    "agnez mo"
   ]);
   const { width } = Dimensions.get("window");
 
@@ -48,7 +49,13 @@ export default function SearchSuggestions(props) {
       {dummies.map(dummy => {
         return (
           <View style={styles.searchSuggest} key={dummy}>
-            <TouchableOpacity style={{ flex: 0.9, flexDirection: "row" }}>
+            <TouchableOpacity
+              style={{ flex: 0.9, flexDirection: "row" }}
+              onPress={async () => {
+                await props.setText(dummy);
+                props.handleSearch();
+              }}
+            >
               <Entypo name="back-in-time" size={20} style={styles.timeIcon} />
               <Text style={styles.textSuggest}>{dummy}</Text>
             </TouchableOpacity>

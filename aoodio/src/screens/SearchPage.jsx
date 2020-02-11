@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 import SearchHeader from "../components/SearchHeader";
 import SearchSuggestions from "../components/SearchSuggestions";
+import styles from "../styles/searchPage";
 
 export default class Search extends Component {
   constructor(props) {
@@ -18,34 +19,27 @@ export default class Search extends Component {
     });
   };
 
-  handleChange = e => {
-    e.preventDefault();
-    this.setSearchHeader(e.nativeEvent.text);
-  };
-
-  handleDelete = () => {
-    this.setState({
-      searchInput: ""
-    });
+  handleNavigate = (to, params) => {
+    const { navigation } = this.props;
+    navigation.navigate(to, params);
   };
 
   handleSearch = () => {
-    alert(this.state.searchInput);
+    this.handleNavigate("SearchResult", this.state);
   };
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <SearchHeader
-          {...this.props}
           input={this.state.searchInput}
-          handleDelete={this.handleDelete}
+          setText={this.setSearchHeader}
           handleSearch={this.handleSearch}
-          handleChange={this.handleChange}
+          goScreen={this.handleNavigate}
         ></SearchHeader>
         <SearchSuggestions
-          {...this.props}
           setText={this.setSearchHeader}
+          handleSearch={this.handleSearch}
         ></SearchSuggestions>
       </View>
     );

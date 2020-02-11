@@ -1,33 +1,45 @@
-import React, { useState } from "react";
-import { StyleSheet, ScrollView, TextInput, Dimensions } from "react-native";
+import React, { useState, useEffect } from "react";
+import { TextInput, View, TouchableOpacity } from "react-native";
+import { Feather, AntDesign } from "@expo/vector-icons";
+
+import styles from "../styles/searchBox";
 
 export default function SearcBox(props) {
   const [searchInput, setSearchInput] = useState("");
-  const { width } = Dimensions.get("window");
-
-  const styles = StyleSheet.create({
-    searchBox: {
-      height: 40,
-      width: width - 30,
-      borderColor: "#bdc3c7",
-      borderWidth: 1,
-      borderRadius: 50
-    }
-  });
 
   const handleChangeText = text => {
     setSearchInput(text);
   };
 
+  useEffect(() => {
+    setSearchInput(props.input.searchInput);
+
+    return () => {
+      setSearchInput("");
+    };
+  }, []);
+
   return (
-    <ScrollView>
+    <View style={styles.container}>
+      <View style={styles.sideIcon}>
+        <Feather name="search" size={20} />
+      </View>
       <TextInput
-        style={styles.searchBox}
+        underlineColorAndroid="transparent"
+        style={styles.textInput}
         onChangeText={handleChangeText}
+        onSubmitEditing={searchInput => props.handleSearch(searchInput)}
         value={searchInput}
-        // placeholder="Search album here"
-        // inlineImageLeft="search_icon"
+        returnKeyType="search"
       />
-    </ScrollView>
+      {searchInput ? (
+        <TouchableOpacity
+          style={styles.sideIcon}
+          onPress={() => setSearchInput("")}
+        >
+          <AntDesign name="close" size={18} />
+        </TouchableOpacity>
+      ) : null}
+    </View>
   );
 }
