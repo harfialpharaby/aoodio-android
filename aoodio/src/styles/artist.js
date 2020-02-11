@@ -46,8 +46,8 @@ export default StyleSheet.create({
     width: 330,
     height: 330,
     alignSelf: "center",
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4
   },
   footerContainer: {
     flex: 2,
@@ -89,5 +89,6 @@ export default StyleSheet.create({
     lineHeight: 50,
     alignSelf: "flex-start"
   },
-  biographyBody: { lineHeight: 23 }
+  biographyBody: { lineHeight: 23 },
+  notFoundMagnifier: { height: 50, marginBottom: 10 }
 });

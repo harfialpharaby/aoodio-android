@@ -12,16 +12,6 @@ import SearchResult from "./src/screens/SearchResult";
 
 const Stack = createStackNavigator();
 
-// function Detail(props) {
-//   console.log(props);
-
-//   return (
-//     <View style={styles.container}>
-//       <SearchResult></SearchResult>
-//     </View>
-//   );
-// }
-
 export default function App() {
   return (
     <NavigationContainer>
@@ -35,7 +25,6 @@ export default function App() {
             name="SearchResult"
             component={SearchResult}
           ></Stack.Screen>
-          {/* <Stack.Screen name="Detail" component={Detail}></Stack.Screen> */}
         </Stack.Navigator>
       </Provider>
     </NavigationContainer>

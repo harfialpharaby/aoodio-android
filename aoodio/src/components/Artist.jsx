@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import useFetchArtist from "../hooks/useFetchArtist";
 import Logo from "./Logo";
@@ -15,12 +16,13 @@ import styles from "../styles/artist";
 
 export default function Artist(props) {
   const [searchInput, setSearchInput] = useState(props.route.params);
+  const [loadImage, setLoadImage] = useState(true);
   const { isLoading, err, artists } = useFetchArtist(searchInput);
+  const navigation = useNavigation();
 
   const handleSearch = input => {
-    setSearchInput(input.nativeEvent.text);
-
-    // this.handleNavigate("SearchResult", this.state);
+    const { text } = input.nativeEvent;
+    setSearchInput({ searchInput: text });
   };
 
   const imageSelector = () => {
@@ -33,6 +35,14 @@ export default function Artist(props) {
     } else {
       return "";
     }
+  };
+
+  const handleNotFound = async () => {
+    let tempInput = searchInput.searchInput;
+    await setSearchInput("");
+    return navigation.navigate("Search", {
+      alert: `Artist ${tempInput}, try input artist fullname or find different artist`
+    });
   };
 
   return (
@@ -51,9 +61,25 @@ export default function Artist(props) {
             </View>
           </View>
         ) : typeof artists[0] === "string" || err ? (
-          <View>
-            <Text>No data found for artist {searchInput}</Text>
-            <Text>Try input artist fullname or find different artist</Text>
+          <View style={styles.background}>
+            <View style={[styles.foreground, styles.shadow, styles.mid]}>
+              <Image
+                source={require("../../assets/1400397-200.png")}
+                style={styles.notFoundMagnifier}
+                resizeMode="contain"
+              ></Image>
+              <Text style={{ textTransform: "capitalize" }}>
+                No data found for artist{" "}
+                <Text
+                  style={{ fontWeight: "bold", textTransform: "uppercase" }}
+                >
+                  {searchInput.searchInput}
+                </Text>
+              </Text>
+              <Text style={{ textTransform: "capitalize" }}>
+                Try input artist fullname or find different artist
+              </Text>
+            </View>
           </View>
         ) : artists[0] ? (
           <ScrollView style={styles.background}>
@@ -61,9 +87,27 @@ export default function Artist(props) {
               <Image
                 source={{ uri: imageSelector() }}
                 loadingIndicatorSource={require("../../assets/Ripple-1s-200px.gif")}
+                onLoadStart={() => setLoadImage(true)}
+                onLoadEnd={() => setLoadImage(false)}
                 style={styles.coverImage}
                 resizeMode="contain"
               ></Image>
+              {loadImage ? (
+                <View
+                  style={[
+                    styles.coverImage,
+                    { justifyContent: "center", alignItems: "center" }
+                  ]}
+                >
+                  <Image
+                    source={require("../../assets/Ripple-1s-200px.gif")}
+                    style={{
+                      height: 100
+                    }}
+                    resizeMode="contain"
+                  />
+                </View>
+              ) : null}
               <Text style={styles.artistName}>
                 {artists[0].artistName || "Uknown"}
               </Text>

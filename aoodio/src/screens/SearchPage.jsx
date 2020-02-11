@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, Alert } from "react-native";
 
 import SearchHeader from "../components/SearchHeader";
 import SearchSuggestions from "../components/SearchSuggestions";
@@ -29,8 +29,14 @@ export default class Search extends Component {
   };
 
   render() {
+    if (this.props.route.params) {
+      const alertMsg = this.props.route.params.alert;
+      Alert.alert("Alert", alertMsg);
+    }
+
     return (
       <View style={styles.container}>
+        {/* {this.props.route.params ? Alert.alert("Alert", alertMsg) : null} */}
         <SearchHeader
           input={this.state.searchInput}
           setText={this.setSearchHeader}
