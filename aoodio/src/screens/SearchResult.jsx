@@ -9,6 +9,7 @@ import {
 
 import ArtistScreen from "../components/Artist";
 import AlbumScreen from "../components/Album";
+import VideoScreen from "../components/MusicVideo";
 
 export default class SearchResult extends Component {
   render() {
@@ -28,11 +29,8 @@ export default class SearchResult extends Component {
               <Feather name="youtube" size={32} color={color} />
             )
           }}
-        >
-          {() => {
-            return <Text>Music Video</Text>;
-          }}
-        </Tab.Screen>
+          component={VideoScreen}
+        />
         <Tab.Screen
           name="Artist"
           options={{

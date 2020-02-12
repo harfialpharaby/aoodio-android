@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 
 import { SEARCH } from "../store/actionTypes";
@@ -52,7 +53,7 @@ export default function Artist() {
               <Text>Searching Data...</Text>
             </View>
           </View>
-        ) : typeof artists[0] === "string" || err ? (
+        ) : typeof artists[0] === "string" ? (
           <View style={styles.background}>
             <View style={[styles.foreground, styles.shadow, styles.mid]}>
               <Image
@@ -71,6 +72,21 @@ export default function Artist() {
               <Text style={{ textTransform: "capitalize" }}>
                 Try input artist fullname or find different artist
               </Text>
+            </View>
+          </View>
+        ) : err ? (
+          <View style={styles.background}>
+            <View style={[styles.foreground, styles.shadow, styles.mid]}>
+              <View style={styles.notFoundMagnifier}>
+                <AntDesign name="exclamationcircleo" size={50} />
+              </View>
+              <Text style={{ textTransform: "capitalize" }}>
+                Something went wrong with the server
+              </Text>
+              <Text style={{ textTransform: "capitalize" }}>
+                Please try again later
+              </Text>
+              <Text>{JSON.stringify(err)}</Text>
             </View>
           </View>
         ) : artists[0] ? (

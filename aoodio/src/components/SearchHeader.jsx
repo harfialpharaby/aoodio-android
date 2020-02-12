@@ -7,10 +7,8 @@ import { SEARCH, NULLIFY } from "../store/actionTypes";
 import styles from "../styles/searchHeader";
 
 export default function SearchHeader(props) {
-  const selector = useSelector(state => state.search);
+  const { input } = useSelector(state => state.search);
   const dispatch = useDispatch();
-
-  const { input } = selector;
   const inputRef = useRef("search-input");
 
   useEffect(() => {
@@ -37,7 +35,6 @@ export default function SearchHeader(props) {
         placeholder="Search..."
         value={input || ""}
         style={styles.searchInput}
-        // onChange={e => props.setText(e.nativeEvent.text)}
         onChange={e => dispatch({ type: SEARCH, input: e.nativeEvent.text })}
         onSubmitEditing={props.handleSearch}
         returnKeyType="search"

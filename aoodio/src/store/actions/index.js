@@ -7,7 +7,10 @@ import {
   FETCH_ARTIST_FAIL,
   FETCH_TRACK_START,
   FETCH_TRACK_SUCCESS,
-  FETCH_TRACK_FAIL
+  FETCH_TRACK_FAIL,
+  FETCH_VIDEO_START,
+  FETCH_VIDEO_SUCCESS,
+  FETCH_VIDEO_FAIL
 } from "../actionTypes";
 
 function generateStar(score) {
@@ -70,24 +73,24 @@ export function fetchAlbums(artist) {
   };
 }
 
-export function fetchTrack(data) {
+export function fetchTrack(id) {
   return function(dispatch) {
     dispatch({
       type: FETCH_TRACK_START
     });
 
-    fetch(`http://www.theaudiodb.com/api/v1/json/1/track.php?m=${data.album}`)
+    fetch(`http://www.theaudiodb.com/api/v1/json/1/track.php?m=${id}`)
       .then(res => {
         return res.json();
       })
       .then(data => {
-        const trackData = [];
+        const tracks = [];
 
         if (!data.track) {
-          trackData.push("Not Found");
+          tracks.push("Not Found");
         } else {
           data.track.forEach(track => {
-            trackData.push({
+            tracks.push({
               id: track.idTrack,
               video: track.strMusicVid,
               thumbnail:
@@ -108,7 +111,7 @@ export function fetchTrack(data) {
 
         dispatch({
           type: FETCH_TRACK_SUCCESS,
-          tracks: trackData
+          tracks
         });
       })
       .catch(err => {
@@ -163,6 +166,48 @@ export function fetchArtist(artistName) {
       .catch(err => {
         dispatch({
           type: FETCH_ARTIST_FAIL,
+          err
+        });
+      });
+  };
+}
+
+export function fetchVideos(id) {
+  return function(dispatch) {
+    dispatch({
+      type: FETCH_VIDEO_START
+    });
+
+    fetch(`https://theaudiodb.com/api/v1/json/1/mvid.php?i=${id}`)
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        const videos = [];
+        if (!data.mvids) {
+          videos.push("Not Found");
+        } else {
+          data.mvids.forEach(video => {
+            videos.push({
+              idArtist: video.idArtist,
+              idAlbum: video.idAlbum,
+              trackName: video.strTrack,
+              trackThumb:
+                video.strTrackThumb ||
+                "https://bandungumroh.com/sie/assets/no_image.png",
+              video: video.strMusicVid
+            });
+          });
+        }
+
+        dispatch({
+          type: FETCH_VIDEO_SUCCESS,
+          videos
+        });
+      })
+      .catch(err => {
+        dispatch({
+          type: FETCH_VIDEO_FAIL,
           err
         });
       });
