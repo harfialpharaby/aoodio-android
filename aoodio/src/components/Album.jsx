@@ -1,7 +1,10 @@
 import React from "react";
 import { FlatList, View, Text } from "react-native";
 
+// import useFetchAlbum from '../store/actions';
+
 export default function Album(props) {
+  // const { isLoading, err, albums } = useFetchArtist(searchInput);
   const dummies = [
     "Coldplay",
     "Avenged Sevenfold",

@@ -8,8 +8,13 @@ import {
   Dimensions
 } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
+import { useSelector, useDispatch } from "react-redux";
+
+import { SEARCH } from "../store/actionTypes";
 
 export default function SearchSuggestions(props) {
+  const selector = useSelector(state => state.search);
+  const dispatch = useDispatch();
   const [dummies, setDummies] = useState([
     "Coldplay",
     "Avenged Sevenfold",
@@ -19,7 +24,7 @@ export default function SearchSuggestions(props) {
     "Agnes",
     "Shakira",
     "Jennifer Lopez",
-    "21 Pilots",
+    "Twenty One Pilots",
     "Clean Bandit",
     "agnez mo"
   ]);
@@ -44,6 +49,10 @@ export default function SearchSuggestions(props) {
     }
   });
 
+  const handleChange = input => {
+    dispatch({ type: SEARCH, input });
+  };
+
   return (
     <ScrollView>
       {dummies.map(dummy => {
@@ -52,7 +61,8 @@ export default function SearchSuggestions(props) {
             <TouchableOpacity
               style={{ flex: 0.9, flexDirection: "row" }}
               onPress={async () => {
-                await props.setText(dummy);
+                // await props.setText(dummy);
+                await handleChange(dummy);
                 props.handleSearch();
               }}
             >
@@ -61,7 +71,10 @@ export default function SearchSuggestions(props) {
             </TouchableOpacity>
             <TouchableOpacity
               style={{ flex: 0.1 }}
-              onPress={() => props.setText(dummy)}
+              onPress={() => {
+                handleChange(dummy);
+                // props.setText(dummy)
+              }}
             >
               <Feather
                 name="arrow-up-left"

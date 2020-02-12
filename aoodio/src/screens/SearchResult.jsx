@@ -12,7 +12,6 @@ import AlbumScreen from "../components/Album";
 
 export default class SearchResult extends Component {
   render() {
-    const searchInput = this.props.route.params;
     const Tab = createBottomTabNavigator();
 
     return (
@@ -42,7 +41,6 @@ export default class SearchResult extends Component {
             )
           }}
           component={ArtistScreen}
-          initialParams={searchInput}
         />
         <Tab.Screen
           name="Album"

@@ -1,11 +1,16 @@
 import React, { useEffect, useRef } from "react";
 import { View, TouchableOpacity, Image, TextInput } from "react-native";
 import { Feather, AntDesign } from "@expo/vector-icons";
+import { useSelector, useDispatch } from "react-redux";
 
+import { SEARCH, NULLIFY } from "../store/actionTypes";
 import styles from "../styles/searchHeader";
 
 export default function SearchHeader(props) {
-  const { input } = props;
+  const selector = useSelector(state => state.search);
+  const dispatch = useDispatch();
+
+  const { input } = selector;
   const inputRef = useRef("search-input");
 
   useEffect(() => {
@@ -32,14 +37,15 @@ export default function SearchHeader(props) {
         placeholder="Search..."
         value={input || ""}
         style={styles.searchInput}
-        onChange={e => props.setText(e.nativeEvent.text)}
+        // onChange={e => props.setText(e.nativeEvent.text)}
+        onChange={e => dispatch({ type: SEARCH, input: e.nativeEvent.text })}
         onSubmitEditing={props.handleSearch}
         returnKeyType="search"
       ></TextInput>
       {input ? (
         <TouchableOpacity
           style={styles.magnifier}
-          onPress={() => props.setText("")}
+          onPress={() => dispatch({ type: NULLIFY })}
         >
           <AntDesign name="close" size={20} />
         </TouchableOpacity>

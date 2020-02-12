@@ -7,22 +7,22 @@ import {
   ScrollView,
   Image
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useSelector, useDispatch } from "react-redux";
 
+import { SEARCH } from "../store/actionTypes";
 import useFetchArtist from "../hooks/useFetchArtist";
 import Logo from "./Logo";
 import SearchBox from "./SearchBox";
 import styles from "../styles/artist";
 
-export default function Artist(props) {
-  const [searchInput, setSearchInput] = useState(props.route.params);
+export default function Artist() {
+  const { input } = useSelector(state => state.search);
+  const dispatch = useDispatch();
   const [loadImage, setLoadImage] = useState(true);
-  const { isLoading, err, artists } = useFetchArtist(searchInput);
-  const navigation = useNavigation();
+  const { isLoading, err, artists } = useFetchArtist(input);
 
   const handleSearch = input => {
-    const { text } = input.nativeEvent;
-    setSearchInput({ searchInput: text });
+    dispatch({ type: SEARCH, input: input.nativeEvent.text });
   };
 
   const imageSelector = () => {
@@ -37,19 +37,11 @@ export default function Artist(props) {
     }
   };
 
-  const handleNotFound = async () => {
-    let tempInput = searchInput.searchInput;
-    await setSearchInput("");
-    return navigation.navigate("Search", {
-      alert: `Artist ${tempInput}, try input artist fullname or find different artist`
-    });
-  };
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <Logo position="flex-end" logoSize={25} linkToHome={true}></Logo>
-        <SearchBox input={searchInput} handleSearch={handleSearch}></SearchBox>
+        <SearchBox handleSearch={handleSearch}></SearchBox>
         {isLoading ? (
           <View style={styles.background}>
             <View style={[styles.foreground, styles.shadow, styles.mid]}>
@@ -73,7 +65,7 @@ export default function Artist(props) {
                 <Text
                   style={{ fontWeight: "bold", textTransform: "uppercase" }}
                 >
-                  {searchInput.searchInput}
+                  {input}
                 </Text>
               </Text>
               <Text style={{ textTransform: "capitalize" }}>
@@ -84,14 +76,6 @@ export default function Artist(props) {
         ) : artists[0] ? (
           <ScrollView style={styles.background}>
             <View style={[styles.foreground, styles.shadow, styles.itemCenter]}>
-              <Image
-                source={{ uri: imageSelector() }}
-                loadingIndicatorSource={require("../../assets/Ripple-1s-200px.gif")}
-                onLoadStart={() => setLoadImage(true)}
-                onLoadEnd={() => setLoadImage(false)}
-                style={styles.coverImage}
-                resizeMode="contain"
-              ></Image>
               {loadImage ? (
                 <View
                   style={[
@@ -108,6 +92,14 @@ export default function Artist(props) {
                   />
                 </View>
               ) : null}
+              <Image
+                source={{ uri: imageSelector() }}
+                loadingIndicatorSource={require("../../assets/Ripple-1s-200px.gif")}
+                onLoadStart={() => setLoadImage(true)}
+                onLoadEnd={() => setLoadImage(false)}
+                style={styles.coverImage}
+                resizeMode="contain"
+              ></Image>
               <Text style={styles.artistName}>
                 {artists[0].artistName || "Uknown"}
               </Text>

@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { View, Alert } from "react-native";
+import { connect } from "react-redux";
 
+import { NULLIFY } from "../store/actionTypes";
 import SearchHeader from "../components/SearchHeader";
 import SearchSuggestions from "../components/SearchSuggestions";
 import styles from "../styles/searchPage";
 
-export default class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchInput: ""
-    };
-  }
+class Search extends Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     searchInput: ""
+  //   };
+  // }
 
   setSearchHeader = input => {
     this.setState({
@@ -20,12 +22,17 @@ export default class Search extends Component {
   };
 
   handleNavigate = (to, params) => {
-    const { navigation } = this.props;
-    navigation.navigate(to, params);
+    // const { navigation } = this.props;
+    // navigation.navigate(to, params);
+    if (to === "Home") {
+      this.props.dispatch({ type: NULLIFY });
+    }
+    this.props.navigation.navigate(to);
   };
 
   handleSearch = () => {
-    this.handleNavigate("SearchResult", this.state);
+    // this.handleNavigate("SearchResult", this.state);
+    this.handleNavigate("SearchResult");
   };
 
   render() {
@@ -38,16 +45,22 @@ export default class Search extends Component {
       <View style={styles.container}>
         {/* {this.props.route.params ? Alert.alert("Alert", alertMsg) : null} */}
         <SearchHeader
-          input={this.state.searchInput}
-          setText={this.setSearchHeader}
+          // input={this.state.searchInput}
+          // setText={this.setSearchHeader}
           handleSearch={this.handleSearch}
           goScreen={this.handleNavigate}
         ></SearchHeader>
         <SearchSuggestions
-          setText={this.setSearchHeader}
+          // setText={this.setSearchHeader}
           handleSearch={this.handleSearch}
         ></SearchSuggestions>
       </View>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return state.search;
+};
+
+export default connect(mapStateToProps)(Search);

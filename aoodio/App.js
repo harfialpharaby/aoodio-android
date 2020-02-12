@@ -20,11 +20,11 @@ export default function App() {
         <View style={{ marginTop: Constants.statusBarHeight }} />
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="Home" component={HomePage}></Stack.Screen>
-          <Stack.Screen name="Search" component={SearchPage}></Stack.Screen>
           <Stack.Screen
             name="SearchResult"
             component={SearchResult}
           ></Stack.Screen>
+          <Stack.Screen name="Search" component={SearchPage}></Stack.Screen>
         </Stack.Navigator>
       </Provider>
     </NavigationContainer>

@@ -72,11 +72,11 @@ export default StyleSheet.create({
     paddingBottom: 5
   },
   footerBody: {
-    fontSize: 20,
+    fontSize: 15,
     height: "40%",
     textAlign: "center",
     alignSelf: "center",
-    textAlignVertical: "bottom"
+    textAlignVertical: "center"
   },
   loadingMagnifier: { width: 50, height: 50, marginBottom: 20 },
   artistName: {
