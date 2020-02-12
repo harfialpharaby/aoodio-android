@@ -19,7 +19,7 @@ export default function Album() {
   const { input } = useSelector(state => state.search);
   const { isLoading, err, albums } = useFetchAlbum(input);
   const [selected, setSelected] = useState({});
-  const { width, height } = Dimensions.get("window");
+  const { width } = Dimensions.get("window");
 
   useEffect(() => {
     setSelected(albums[0] || {});

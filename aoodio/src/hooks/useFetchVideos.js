@@ -7,7 +7,7 @@ export default function useFetchVideos(artist) {
   const { video } = useSelector(state => state);
 
   useEffect(() => {
-    if (artist.hasOwnProperty("id")) {
+    if (typeof artist === "object" && artist.hasOwnProperty("id")) {
       dispatch(fetchVideos(artist.id));
     }
   }, [dispatch, artist]);

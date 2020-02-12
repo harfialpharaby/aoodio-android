@@ -1,10 +1,18 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet, Platform } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  FlatList,
+  StyleSheet,
+  Platform
+} from "react-native";
 import { useSelector } from "react-redux";
 import { WebView } from "react-native-webview";
-import { Video } from "expo-av";
 
 import useFetchVideos from "../hooks/useFetchVideos";
+import artistStyles from "../styles/artist";
+import albumStyles from "../styles/album";
 
 export default function MusicVideo() {
   const { artists } = useSelector(state => state.artist);
@@ -19,7 +27,13 @@ export default function MusicVideo() {
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       {isLoading ? (
-        <Text>Loading...</Text>
+        <View style={[albumStyles.loadingBg, artistStyles.mid]}>
+          <Image
+            source={require("../../assets/Pulse-1s-200px.gif")}
+            style={artistStyles.loadingMagnifier}
+          />
+          <Text>Fetching Music Videos...</Text>
+        </View>
       ) : typeof data[0] === "string" ? (
         <Text>Data Not Found</Text>
       ) : data.length ? (
@@ -57,7 +71,7 @@ export default function MusicVideo() {
           keyExtractor={(item, index) => index.toString()}
         />
       ) : (
-        <View>Still Loading...</View>
+        <Text>Still Loading...</Text>
       )}
     </View>
   );
